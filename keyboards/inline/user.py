@@ -5,7 +5,7 @@ from defs.classes import UserSales
 
 class UsersHelp:
 
-    def create_kb(self):
+    def create_kb():
         kb = InlineKeyboardMarkup()
         kb.row_width = 2
         btns = []
@@ -17,7 +17,7 @@ class UsersHelp:
 
 class UsersCheckSales:
 
-    def create_kb(self):
+    def create_kb():
         kb = InlineKeyboardMarkup()
         kb.row_width = 2
         btns = []
