@@ -84,21 +84,26 @@ async def enter_szdor(msg: Message, state: FSMContext):
                          reply_markup=inline.UsersCheckSales.create_kb())
 
 
-
 async def check_sales_ok(cb: CallbackQuery, state: FSMContext):
     u = User(cb.from_user)
     log.info(' '.join([await state.get_state(), cb.data, u.info_user()]))
-    if cb.data == 'CheckOk':
-        await cb.message.answer(text='Отправлено')
-        us = UserSales()
-        res = us.save_result(u.id, await state.get_data())
+    us = UserSales()
+    res = us.save_result(u.id, await state.get_data())
+    if res == True:
         await state.reset_state()
-        await cb.message.answer(res)
-    elif cb.data == 'CheckChange':
-        await state.set_state(StateUser.change_sales)
-        kb = inline.UserProducts()
-        await cb.message.answer(text='Что исправить?',
-                                reply_markup=kb.create_kb())
+        await cb.message.answer(text='Отправлено.')
+    else:
+        await cb.message.answer(text=txt_total(u, await state.get_data()),
+                                reply_markup=inline.UsersCheckSales.create_kb())
+
+
+async def check_sales_false(cb: CallbackQuery, state: FSMContext):
+    u = User(cb.from_user)
+    log.info(' '.join([await state.get_state(), cb.data, u.info_user()]))
+    await state.set_state(StateUser.change_sales)
+    kb = inline.UserProducts()
+    await cb.message.answer(text='Что исправить?',
+                            reply_markup=kb.create_kb())
 
 
 async def change_values(cb: CallbackQuery, state: FSMContext):
