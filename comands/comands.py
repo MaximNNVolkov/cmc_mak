@@ -19,7 +19,7 @@ async def cmd_start(message: types.Message, state: FSMContext):
         fmt.text(u.get_url(), ', ', sep=''),
         fmt.text("Привет. Как Ваши продажи?"),
         fmt.text('Нажмите кнопку /sales и отправьте результат за день.'),
-        sep=''))
+        sep='\n'))
 
 
 async def cmd_help(message: types.Message, state: FSMContext):

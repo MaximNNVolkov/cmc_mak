@@ -46,9 +46,9 @@ async def sales_start(msg: Message, state: FSMContext):
     log.info(u.info_user())
     await state.set_state(StateUser.enter_id)
     await msg.answer(text=fmt.text(
-            fmt.text(u.get_url(), ', ', sep=''),
+            fmt.text(u.get_url(), ',', sep=''),
             fmt.text('Введите Ваш id'),
-            sep=''))
+            sep=' '))
 
 
 async def enter_id(msg: Message, state: FSMContext):
@@ -93,6 +93,11 @@ async def check_sales_ok(cb: CallbackQuery, state: FSMContext):
         await state.reset_state()
         await cb.message.answer(text='Отправлено.')
     else:
+        await cb.message.bot.delete_message(chat_id=u.id, message_id=cb.message.message_id)
+        await cb.message.answer(text=fmt.text(
+            fmt.text('Сегодня от Вас уже поступила информация.'),
+            fmt.text('Ждем Вас завтра.'),
+            sep='\n'))
         await cb.message.answer(text=txt_total(u, await state.get_data()),
                                 reply_markup=inline.UsersCheckSales.create_kb())
 
