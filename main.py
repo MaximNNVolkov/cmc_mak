@@ -7,7 +7,7 @@ from utils.startup import set_default
 
 
 # переменные
-Token = getenv("TOKEN_CMC")
+Token = getenv("TOKEN_CMC_MAK")
 if not Token:
     exit("Error: no token provided")
 bot = Bot(token=Token)

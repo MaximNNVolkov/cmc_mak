@@ -8,9 +8,15 @@ from datetime import datetime
 
 DATABASE = {
     'drivername': 'sqlite',
-    'database': 'test.db'
+    'database': 'test.db',
+    'username': '',
+    'password': '',
+    'host': '',
+    'port': '',
+    'query': ''
 }
-engine = create_engine(URL(**DATABASE))
+#engine = create_engine(URL(**DATABASE))
+engine = create_engine("sqlite:///test.db")
 DeclarativeBase = declarative_base()
 
 
@@ -54,7 +60,8 @@ class Admin(DeclarativeBase):
 
 
 def db_conn():
-    engine = create_engine(URL(**DATABASE))
+    # engine = create_engine(URL(**DATABASE))
+    engine = create_engine("sqlite:///test.db")
     DeclarativeBase.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
     session = Session()

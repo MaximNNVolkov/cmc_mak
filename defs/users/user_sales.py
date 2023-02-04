@@ -18,6 +18,7 @@ def txt_false():
 def txt_total(u: User, d: dict):
     sales = ''
     d_total = UserSales()
+    print(d)
     for k in d_total.my_d.keys():
         sales = ' '.join([sales, d_total.my_d[k], d[k], '\n'])
     text = fmt.text(
@@ -47,7 +48,7 @@ async def sales_start(msg: Message, state: FSMContext):
     await state.set_state(StateUser.enter_id)
     await msg.answer(text=fmt.text(
             fmt.text(u.get_url(), ',', sep=''),
-            fmt.text('Введите Ваш id'),
+            fmt.text('Введите Ваш ГОСБ'),
             sep=' '))
 
 
@@ -55,30 +56,38 @@ async def enter_id(msg: Message, state: FSMContext):
     u = User(msg.from_user)
     log.info(' '.join([await state.get_state(), msg.text, u.info_user()]))
     if await msg_process(msg, state, 'id'):
-        await state.set_state(StateUser.enter_bch)
-        await msg.answer(text='Введите БЧ.')
+        await state.set_state(StateUser.enter_meets)
+        await msg.answer(text='Введите количество встреч.')
 
 
-async def enter_bch(msg: Message, state: FSMContext):
+async def enter_meets(msg: Message, state: FSMContext):
     u = User(msg.from_user)
     log.info(' '.join([await state.get_state(), msg.text, u.info_user()]))
-    if await msg_process(msg, state, 'bch'):
-        await state.set_state(StateUser.enter_sup)
-        await msg.answer(text='Введите СУП.')
+    if await msg_process(msg, state, 'meets'):
+        await state.set_state(StateUser.enter_agent_reg)
+        await msg.answer(text='Введите количество новых зарегистрированных агентов.')
 
 
-async def enter_sup(msg: Message, state: FSMContext):
+async def enter_agent_reg(msg: Message, state: FSMContext):
     u = User(msg.from_user)
     log.info(' '.join([await state.get_state(), msg.text, u.info_user()]))
-    if await msg_process(msg, state, 'sup'):
-        await state.set_state(StateUser.enter_szdor)
-        await msg.answer(text='Введите СберЗдоровье.')
+    if await msg_process(msg, state, 'agent_reg'):
+        await state.set_state(StateUser.enter_agent_act)
+        await msg.answer(text='Введите количество активированных агентов.')
 
 
-async def enter_szdor(msg: Message, state: FSMContext):
+async def enter_agent_act(msg: Message, state: FSMContext):
     u = User(msg.from_user)
     log.info(' '.join([await state.get_state(), msg.text, u.info_user()]))
-    if await msg_process(msg, state, 'szdor'):
+    if await msg_process(msg, state, 'agent_act'):
+        await state.set_state(StateUser.enter_UP)
+        await msg.answer(text='Введите количество УП за текущий день.')
+
+
+async def enter_UP(msg: Message, state: FSMContext):
+    u = User(msg.from_user)
+    log.info(' '.join([await state.get_state(), msg.text, u.info_user()]))
+    if await msg_process(msg, state, 'UP'):
         await state.set_state(StateUser.check_sales)
         await msg.answer(text=txt_total(u, await state.get_data()),
                          reply_markup=inline.UsersCheckSales.create_kb())
